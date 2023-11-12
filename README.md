@@ -15,4 +15,4 @@ Here we provide the link for an easier access to the notebook: https://nbviewer.
 
 * 1.1 - Lorenzo - Completed
 * 1.2 - Lorenzo - Completed
-* 1.3 - Lorenzo - WIP
+* 1.3 - Lorenzo - Completed
