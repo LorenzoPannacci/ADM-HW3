@@ -3,6 +3,7 @@
 ## Team members
 * Lorenzo Pannacci 1948926
 * Francesco Proietti 1873188
+* Selin Topaloglu 2113300
 * TO ADD
 
 This repository contains the submission of Group #13 of the third homework for the course "Algorithmic Methods of Data Mining", Academic year 2023–2024.
