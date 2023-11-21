@@ -21,4 +21,7 @@ Here we provide the link for an easier access to the notebook: https://nbviewer.
 * 2.0 - Santiago - Completed
 * 2.1 - Santiago - Completed
 * 2.2 - Santiago - Working In Progress
+* 3.1 - Selin - Completed
+* 3.2 - Selin - Working In Progress
+* 5... - Selin - Working In Progress
 * 6 - Francesco - Completed
