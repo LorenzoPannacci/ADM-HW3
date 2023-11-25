@@ -9,7 +9,7 @@
 This repository contains the submission of Group #13 of the third homework for the course "Algorithmic Methods of Data Mining", Academic year 2023–2024.
 Here we provide the link for an easier access to the notebook: https://nbviewer.org/github/LorenzoPannacci/ADM-HW3/blob/main/main.ipynb
 
-**We found that some pages on the website have been recently changed from the time we executed the web crawler, tihs means that the results obtained could be not totally accurate with what is currently on the website.**
+**IMPORTANTY: We found that some pages on the website have been recently changed from the time we executed the web crawler, tihs means that the results obtained could be not totally accurate with what is currently on the website.**
 
 ## Contents
 
@@ -36,7 +36,7 @@ Here we provide the link for an easier access to the notebook: https://nbviewer.
 * 2.2 - Santiago - Completed
 * 3 - Selin - Completed
 * 4 - Lorenzo - Completed
-* 5 - Selin - Working In Progress
+* 5 - Selin & Lorenzo - Completed
 * 6 - Francesco - Completed
 * 7 - Lorenzo - Completed
 * Notebook and repository organization - Lorenzo
