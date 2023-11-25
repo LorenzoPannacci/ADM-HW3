@@ -14,6 +14,16 @@ Here we provide the link for an easier access to the notebook: https://nbviewer.
 ## Contents
 
 * `main.ipynb`: the main notebook files. It contains all the answers to your research and theoretical questions. The notebook has all the cells already executed.
+* `functions`: folder containing all the relevant functions used in the notebook
+    * `config.py`: module containing all the global variables used troughout the notebook
+    * `crawler.py`: module containing all the functions used during the web crawling
+    * `parser.py`: module containing all the function unsed to extract informations from the .html files
+    * `engine.py`: module containing all the functions used during question 2
+    * `new_scoring.py`: module containing all the functions used during question 3
+    * `visualizing.py`: module containing all the functions used during question 4
+    * `algorithmic_question.py`: module containing the script for the algorithmic question
+* `CLQ_screen.png`: screenshot of the execution of the command line question
+* `CommandLine.sh`: command-line question script
 
 ## Suddivision of exercises
 
@@ -23,7 +33,9 @@ Here we provide the link for an easier access to the notebook: https://nbviewer.
 * 2.0 - Santiago - Completed
 * 2.1 - Santiago - Completed
 * 2.2 - Santiago - Completed
-* 3.1 - Selin - Completed
-* 3.2 - Selin - Working In Progress
-* 5... - Selin - Working In Progress
+* 3 - Selin - Completed
+* 4 - Lorenzo - Completed
+* 5 - Selin - Working In Progress
 * 6 - Francesco - Completed
+* 7 - Lorenzo - Completed
+* Notebook and repository organization - Lorenzo
