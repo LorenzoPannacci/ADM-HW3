@@ -21,6 +21,7 @@ Here we provide the link for an easier access to the notebook: https://nbviewer.
     * `engine.py`: module containing all the functions used during question 2
     * `new_scoring.py`: module containing all the functions used during question 3
     * `visualizing.py`: module containing all the functions used during question 4
+    * `bonus.py`: module containing all the functions used during question 5
     * `algorithmic_question.py`: module containing the script for the algorithmic question
 * `CLQ_screen.png`: screenshot of the execution of the command line question
 * `CommandLine.sh`: command-line question script
