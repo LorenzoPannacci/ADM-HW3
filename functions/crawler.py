@@ -138,7 +138,6 @@ def crawl_pages():
 
                     time.sleep(sleep_time) # wait to avoid getting blocked
 
-
 def check_html_files():
     '''
     This function check if we downloaded correctly all the html files.
