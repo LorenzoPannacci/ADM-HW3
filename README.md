@@ -9,6 +9,8 @@
 This repository contains the submission of Group #13 of the third homework for the course "Algorithmic Methods of Data Mining", Academic year 2023–2024.
 Here we provide the link for an easier access to the notebook: https://nbviewer.org/github/LorenzoPannacci/ADM-HW3/blob/main/main.ipynb
 
+**We found that some pages on the website have been recently changed from the time we executed the web crawler, tihs means that the results obtained could be not totally accurate with what is currently on the website.**
+
 ## Contents
 
 * `main.ipynb`: the main notebook files. It contains all the answers to your research and theoretical questions. The notebook has all the cells already executed.

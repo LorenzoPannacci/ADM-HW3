@@ -61,8 +61,9 @@ def get_coordinates_table(api_key):
 
     return coordinates_df
 
-def visualize_map(query, coordinates_df):
-    courses_df = load_all_courses()
+def visualize_map(courses_df, coordinates_df):
+
+    courses_df["fees (EUR)"] = pd.to_numeric(courses_df["fees (EUR)"], errors='coerce')
 
     # for markers colors
 
@@ -72,7 +73,7 @@ def visualize_map(query, coordinates_df):
     if np.isnan(min_fee):
         min_fee = 0
     if np.isnan(max_fee):
-        max_fee = 0
+        max_fee = min_fee + 1
 
     # create legend
 
@@ -80,8 +81,8 @@ def visualize_map(query, coordinates_df):
     colormap = colormap.to_step(index=np.linspace(min_fee, max_fee, num = 50))
     colormap.caption = 'Fees cost (unknown is light blue)'
 
-    # create empty world map centered on Rome
-    map = folium.Map(location = [41.902782, 12.496366], max_bounds = True, min_zoom = 2)
+    # create empty world map centered on London
+    map = folium.Map(location = [51.5287398,-0.2664023], max_bounds = True, min_zoom = 2, zoom_start = 5)
 
     # we add a single marker per city
     for group_tuple, group in courses_df.groupby(["universityName", "city", "country"]):
@@ -100,6 +101,8 @@ def visualize_map(query, coordinates_df):
             else:
                 description_string += str(course["fees (EUR)"]) + " EUR" + "<br>"
 
+            description_string += "<b>" + "Score: " + "</b>" + str(round(course["total_score"], 4)) + "<br>"
+
         # create marker
         iframe = folium.IFrame(description_string)
 
@@ -116,7 +119,7 @@ def visualize_map(query, coordinates_df):
             color = colormap.rgba_hex_str(float(reference_fee))
 
         folium.Marker(
-                    location = [coordinates_row["latitude"].item(), coordinates_row["longitude"].item()],
+                    location = [coordinates_row["latitude"].head(1).item(), coordinates_row["longitude"].head(1).item()],
                     popup = popup,
                     icon = folium.Icon(icon = "solid fa-school-flag", prefix = "fa", icon_color = color, color = "gray"),
                     ).add_to(map)

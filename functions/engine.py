@@ -307,7 +307,7 @@ def search_engine(query, vocabulary, inverted_index, all_rows = False):
                         'city': fields[10],
                         'country': fields[11],
                         'administration': fields[12],
-                        'url': fields[13],
+                        'url': fields[13]
             })
 
         else:
@@ -315,7 +315,7 @@ def search_engine(query, vocabulary, inverted_index, all_rows = False):
                         'courseName': fields[0],
                         'universityName': fields[1],
                         'description': fields[4],
-                        'URL': fields[-1],
+                        'url': fields[-1]
             })
 
     # create pandas DataFrame
@@ -408,8 +408,7 @@ def top_k_documents(query, vocabulary, inverted_index, inverted_index_tfidf, k =
                 else:
                     tmp.update(t_id)
         if i>0:
-            doc=doc.intersection(doc, tmp)        
-    
+            doc=doc.intersection(doc, tmp)    
 
     # calculate cosine similarity for each matching document
     heap = []
@@ -432,23 +431,41 @@ def top_k_documents(query, vocabulary, inverted_index, inverted_index_tfidf, k =
         
         # add the document information and similarity score to the heap
         heapq.heappush(heap, (-score, doc_id))
-        
-    # get the top-k documents 
+    
     result_documents = []
-    for i in range(min(k,len(heap))):
-        similarity_score, doc_id = heapq.heappop(heap)
-        
-        tsv_file = os.path.join(tsvs_path, f"{doc_id}")
-        with open(tsv_file, 'r', encoding='utf-8') as ff:
-            lines=ff.readlines()
-        fields=lines[1].split("\t")
-        result_documents.append({
-                    'courseName': fields[0],
-                    'universityName': fields[1],
-                    'description': fields[4],
-                    'URL': fields[-1],
-                    'similarityScore': -similarity_score  # Convert back to positive
-        })
-        
+    if k == "all":
+        # get all documents
+        for i in range(len(heap)):
+            similarity_score, doc_id = heapq.heappop(heap)
+            
+            tsv_file = os.path.join(tsvs_path, f"{doc_id}")
+            with open(tsv_file, 'r', encoding='utf-8') as ff:
+                lines=ff.readlines()
+            fields=lines[1].split("\t")
+            result_documents.append({
+                        'similarityScore': -similarity_score,  # Convert back to positive
+                        'courseName': fields[0],
+                        'universityName': fields[1],
+                        'description': fields[4],
+                        'url': fields[-1]
+            })
+
+    else:
+        # get the top-k documents
+        for i in range(min(k,len(heap))):
+            similarity_score, doc_id = heapq.heappop(heap)
+            
+            tsv_file = os.path.join(tsvs_path, f"{doc_id}")
+            with open(tsv_file, 'r', encoding='utf-8') as ff:
+                lines=ff.readlines()
+            fields=lines[1].split("\t")
+            result_documents.append({
+                        'similarityScore': -similarity_score,  # Convert back to positive
+                        'courseName': fields[0],
+                        'universityName': fields[1],
+                        'description': fields[4],
+                        'url': fields[-1]
+            })
+            
     # return pandas DataFrame
     return pd.DataFrame(result_documents)
