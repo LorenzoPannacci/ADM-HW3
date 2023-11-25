@@ -12,6 +12,9 @@ import branca
 import numpy as np
 
 def load_all_courses():
+    '''
+    This method create a dataframe containing all the courses of our dataset.
+    '''
     # load courses dataset
     courses_columns = ["courseName", "universityName", "facultyName", "isItFullTime", "description", "startDate", "fees", "modality", "duration", "city", "country", "administration", "url"]
     courses_df = pd.DataFrame(columns = courses_columns)
@@ -27,7 +30,9 @@ def load_all_courses():
 
 def get_coordinates_table(api_key):
     '''
-    Create (if necessary) and load the coordinates table
+    Create (if necessary) and load the coordinates table. When the coordinates table is missing it creates it by taking all possible
+    addresses (concatenation of 'universityName', 'city' and 'country') present in our dataset and converting them into latitudes and
+    longitudes via Bing Maps API. We do not provide the API keys for security reasons.
     '''
 
     # if already created don't waste api calls
@@ -62,21 +67,22 @@ def get_coordinates_table(api_key):
     return coordinates_df
 
 def visualize_map(courses_df, coordinates_df):
+    '''
+    This method create an interactive map using the library folium and populate it with markers. All markers have a color based
+    on the fees of the courses inside that specific university. The map also has a legend for the colors of the markers.
+    '''
 
     courses_df["fees (EUR)"] = pd.to_numeric(courses_df["fees (EUR)"], errors='coerce')
 
     # for markers colors
-
     min_fee = courses_df["fees (EUR)"].min()
     max_fee = courses_df["fees (EUR)"].max()
-
     if np.isnan(min_fee):
         min_fee = 0
     if np.isnan(max_fee):
         max_fee = min_fee + 1
 
     # create legend
-
     colormap = branca.colormap.linear.YlOrRd_07.scale(min_fee, max_fee)
     colormap = colormap.to_step(index=np.linspace(min_fee, max_fee, num = 50))
     colormap.caption = 'Fees cost (unknown is light blue)'
@@ -84,7 +90,7 @@ def visualize_map(courses_df, coordinates_df):
     # create empty world map centered on London
     map = folium.Map(location = [51.5287398,-0.2664023], max_bounds = True, min_zoom = 2, zoom_start = 5)
 
-    # we add a single marker per city
+    # we add a single marker per university
     for group_tuple, group in courses_df.groupby(["universityName", "city", "country"]):
         # get coordinates of marker
         coordinates_row = coordinates_df[(coordinates_df["universityName"] == group_tuple[0]) & (coordinates_df["city"] == group_tuple[1]) & (coordinates_df["country"] == group_tuple[2])]
@@ -103,28 +109,25 @@ def visualize_map(courses_df, coordinates_df):
 
             description_string += "<b>" + "Score: " + "</b>" + str(round(course["total_score"], 4)) + "<br>"
 
-        # create marker
+        # create marker text box
         iframe = folium.IFrame(description_string)
-
-        popup = folium.Popup(iframe,
-                            min_width=500,
-                            max_width=500)
+        popup = folium.Popup(iframe, min_width=500, max_width=500)
         
         # get marker color:
-        reference_fee = group["fees (EUR)"].min()
-
+        reference_fee = group["fees (EUR)"].min() 
         if pd.isna(reference_fee):
             color = "lightblue"
         else:
             color = colormap.rgba_hex_str(float(reference_fee))
 
+        # insert marker to map
         folium.Marker(
                     location = [coordinates_row["latitude"].head(1).item(), coordinates_row["longitude"].head(1).item()],
                     popup = popup,
                     icon = folium.Icon(icon = "solid fa-school-flag", prefix = "fa", icon_color = color, color = "gray"),
                     ).add_to(map)
 
-    # add legend
+    # add legend to map
     colormap.add_to(map)
 
     # display map

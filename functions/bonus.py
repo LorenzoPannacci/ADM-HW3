@@ -9,35 +9,12 @@ from tqdm.notebook import tqdm
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 import heapq
-
-def calculate_start_date_difference(start_date):
-    # to eliminate the courses already started we need to find monthly difference between current month and start dates
-    current_month = pd.to_datetime('today').month
-    start_months = parse_start_date(start_date)
-    
-    if not start_months:
-        return -1  # return -1 if no valid months are found ("See course page", "Any Month" etch.)
-    
-    # find the closest future month
-    # to find the closest month among the list we need to select the minimum difference. 
-    closest_future_month = min(((month - current_month) % 12) for month in start_months) 
-
-    months_difference = closest_future_month
-
-    return months_difference
-
-def parse_start_date(start_date):
-    #seperate the months in the string
-    months = start_date.split(', ')
-    
-    try:
-        # convert month names to their numerical representation
-        month_numbers = [pd.to_datetime(month.strip(), format='%B').month for month in months]
-        return month_numbers
-    except ValueError:
-        return []  # return an empty list for invalid dates such as "See Course", "Any Month"
     
 def generalized_create_vocabulary(t):
+    '''
+    Works the same as the one described in 'engine.py' but generalized for all the fields needed in question 5.
+    '''
+
     print("Creating vocabulary type " + str(t) + "..." )
 
     # start an empty dictionary
@@ -81,6 +58,10 @@ def generalized_create_vocabulary(t):
             vocab.write(f"{word}\t{term_id}\n")
 
 def generalized_load_vocabulary(file_path):
+    '''
+    The same as the one described in 'engine.py'
+    '''
+
     vocabulary = {}
 
     with open(file_path, 'r') as file:
@@ -94,6 +75,10 @@ def generalized_load_vocabulary(file_path):
     return vocabulary
 
 def generalized_create_inverted_index(vocabulary, t):
+    '''
+    Works the same as the one described in 'engine.py' but generalized for all the fields needed in question 5.
+    '''
+
     print("Creating inverted index type " + str(t) + "..." )
     # initialize an empty inverted_index
     inverted_index={}
@@ -138,6 +123,10 @@ def generalized_create_inverted_index(vocabulary, t):
             inv_ind.write(f"{word}\t{term_id}\n")
 
 def generalized_create_inverted_index_tfidf(vocabulary, t):
+    '''
+    Works the same as the one described in 'engine.py' but generalized for all the fields needed in question 5.
+    '''
+
     print("Creating inverted index type " + str(t) + "..." )
     # initialize the inverted index with tf-idf scores 
     inv_index_tfidf = {}
@@ -205,8 +194,10 @@ def generalized_create_inverted_index_tfidf(vocabulary, t):
         for word, term_id in inv_index_tfidf.items():
             tfidf.write(f"{word}\t{term_id}\n")
 
-def generalized_load_inverted_index(file_path):
-    # works both for inverted index and inverted index tfidf
+def generalized_load_inverted_index(file_path):   
+    '''
+    The same as the one described in 'engine.py'
+    '''
 
     inverted_index = {}
 
@@ -220,6 +211,12 @@ def generalized_load_inverted_index(file_path):
     return inverted_index
 
 def get_query_dataframe(t, query):
+    '''
+    Given a query in one of the fields requested by question 5, return a dataframe containing only relevant courses and their
+    score calculated on the query in the corresponding field. It's a generalized version of the 'get_top_k' functions written
+    in 'engine.py'.
+    '''
+
     # get paths
     vocabulary_path = data_folder_path + "vocabulary_type" + str(t) + ".txt"
     inverted_index_path = data_folder_path + "inv_index_type" + str(t) + ".txt"
@@ -238,32 +235,6 @@ def get_query_dataframe(t, query):
         generalized_create_inverted_index_tfidf(vocabulary, t)
     inverted_index_tfidf = generalized_load_inverted_index(inverted_index_tfidf_path)
 
-    ############################
-    # get all useful documents #
-    ############################
-
-    query_words = engine.preprocess_text(query).split()
-    # this list will contain all the docs that have the complete query in their feature
-    doc = set() 
-    for i in range(len(query_words)):
-        tmp=set() # we will need this to determine if a document contains all the query elements
-        w = query_words[i]
-        if w in vocabulary:
-            term_id = vocabulary[w]
-            if term_id in inverted_index:
-                t_id=inverted_index[term_id]
-                if i==0:
-                    doc.update(t_id)
-                else:
-                    tmp.update(t_id)
-       # filters out the documents that don't contain the previous word of the query
-        if i>0:
-            doc=doc.intersection(doc, tmp)
-
-    #############
-    # get score #
-    #############
-
     # preprocess and tokenize the query
     query_words = engine.preprocess_text(query)
     
@@ -275,7 +246,10 @@ def get_query_dataframe(t, query):
     # tokenize the query
     query_words=query_words.split()
     
-    # find documents that contain all words in the query
+    ############################
+    # get all useful documents #
+    ############################
+
     doc = set()
     for i in range(len(query_words)):
         tmp=set() 
@@ -291,7 +265,10 @@ def get_query_dataframe(t, query):
         if i>0:
             doc=doc.intersection(doc, tmp)    
 
-    # calculate cosine similarity for each matching document
+    ##############
+    # get scores #
+    ##############
+
     heap = []
     for doc_id in doc:
         doc_vector = {}
@@ -312,6 +289,10 @@ def get_query_dataframe(t, query):
         
         # add the document information and similarity score to the heap
         heapq.heappush(heap, (-score, doc_id))
+
+    ######################
+    # creating dataframe #
+    ######################
     
     result_documents = []
     for i in range(len(heap)):
@@ -340,7 +321,25 @@ def get_query_dataframe(t, query):
 
 def calculate_start_date_difference(start_date):
     try:
-        return (pd.to_datetime('today') - pd.to_datetime(start_date)).months
+        #seperate the months in the string
+        months = start_date.split(', ')
+    
+        # convert month names to their numerical representation
+        start_months = [pd.to_datetime(month.strip(), format='%B').month for month in months]
+
+        current_month = pd.to_datetime('today').month
+        
+        if not start_months:
+            return 12  # return -1 if no valid months are found ("See course page", "Any Month" etch.)
+        
+        # find the closest future month
+        # to find the closest month among the list we need to select the minimum difference. 
+        closest_future_month = min(((month - current_month) % 12) for month in start_months) 
+
+        months_difference = closest_future_month
+
+        return months_difference
+
     except:
         return 12
 
@@ -353,11 +352,13 @@ def bonus_search_engine(input_dict):
     For the 2nd, 3rd, 4th and 5th parts of the bonus question we need to make filtering. 
     The filtering process will be conducted in the search_engine_bonus function
     '''
+
     description_query = input_dict["description_query"]
     df1 = get_query_dataframe(1, description_query)
 
     advanced_search_engine = input_dict["advanced_search_engine"]
     if advanced_search_engine:
+        # we get courses relevant to all the queries by doint intersections of the dataframes obtained singularly on the single queries
 
         course_name_query = input_dict["course_name_query"]
         df2 = get_query_dataframe(2, course_name_query)
@@ -379,6 +380,8 @@ def bonus_search_engine(input_dict):
             print("No courses found!")
             return
         df1 = pd.merge(df1, df4, on=['courseName', 'universityName', 'isItFullTime', 'description', 'startDate', 'fees (EUR)', 'city', 'country', 'administration', 'url'], how='inner')
+
+    # then we apply the filters
 
     use_fee_filter = input_dict["use_fee_filter"]
     if use_fee_filter:
@@ -412,6 +415,8 @@ def bonus_search_engine(input_dict):
         df1["advanced_score"] = df1["similarityScore_type1"]
         df1 = df1.drop(["similarityScore_type1"], axis = 1)
 
+    # finally we drop non requested columns and return the dataframe
+
     df1 = df1.drop(["isItFullTime", "description", "startDate", "fees (EUR)", "city", "country", "administration"], axis = 1)
-    
+
     return df1

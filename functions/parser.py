@@ -12,14 +12,7 @@ def html_extraction():
     This function open one by one all the html files and extract all the useful informations we need from them.
     Extracted informations are then saved in .tsvs files
     We avoid repeating extractions if files are already present.
-    We notice that some fields are always present while others are not. Those two kinds are treated differently
-    
-    Args:
-        - None
-
-    Returns:
-        - None
-
+    We notice that some fields are always present while others are not. Those two kinds are treated differently.
     '''
 
     # create folder if not exist already

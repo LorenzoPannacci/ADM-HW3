@@ -1,5 +1,10 @@
 # config.py
 
+'''
+This file contains all the global variable used troughout the notebook. We stored them here to make them
+usable by all the modules by simply importing this file.
+'''
+
 # path to the folder that contains all the data
 global data_folder_path
 data_folder_path = r"data/"

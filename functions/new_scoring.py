@@ -7,6 +7,10 @@ import pandas as pd
 import heapq
 
 def parse_start_date(start_date):
+    '''
+    Convert 'start_date' string into numbers representing the months.
+    '''
+
     #seperate the months in the string
     months = start_date.split(', ')
     
@@ -48,15 +52,15 @@ def calculate_start_date_score(start_date):
         return -1
 
 def scoring_function(query, vocabulary, inverted_index, inverted_index_tfidf, k = 5, all_columns = False):
+    # create necessary dataframes
     result_df = engine.search_engine(query, vocabulary, inverted_index, all_rows = True)
     similarities_scores = engine.top_k_documents(query, vocabulary, inverted_index, inverted_index_tfidf, k = "all")
 
     # use a heap to maintain the top-k documents
     heap = []
-
     for _, row in result_df.iterrows():
         
-        # score based on the presence of the full query in that spesific order in the description
+        # score based on the presence of the query in that spesific order in the description
         if engine.preprocess_text(query) in engine.preprocess_text(row['description']):
             score_description = similarities_scores[similarities_scores["url"] == row["url"]]["similarityScore"].item()
         else:
@@ -90,6 +94,7 @@ def scoring_function(query, vocabulary, inverted_index, inverted_index_tfidf, k 
             0.05 * score_administration +
             0.05 * score_isitfulltime
         )
+
         # we should store the top_k elements as a heap structure
         # if the heap is not full, add the current row
         if len(heap) < k:

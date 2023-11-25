@@ -124,7 +124,8 @@ def convert_to_eur(fees):
 
 def fees_preprocessing():
     '''
-    Add to our .tsv files a new column that store a value representing the fee of the course.
+    Add to our .tsv files a new column that store a value representing the fee of the course. When there is no fee to get from
+    the 'fees' column we add NaN.
     '''
 
     for i in tqdm(range(1, n_courses + 1)):
@@ -205,6 +206,9 @@ def create_vocabulary():
     print("Vocabulary successfully created!")
 
 def load_vocabulary(file_path):
+    '''
+    Function to load an already created dictionary.
+    '''
     vocabulary = {}
 
     with open(file_path, 'r') as file:
@@ -253,7 +257,10 @@ def create_inverted_index(vocabulary):
     print("Inverted index successfully created!")
 
 def load_inverted_index(file_path):
-    # works both for inverted index and inverted index tfidf
+    '''
+    Function to load an already created inverted index.
+    Works both for inverted index and inverted index tfidf.
+    '''
 
     inverted_index = {}
 
@@ -267,6 +274,12 @@ def load_inverted_index(file_path):
     return inverted_index
 
 def search_engine(query, vocabulary, inverted_index, all_rows = False):
+    '''
+    This function return a dataframe containing only those documents which description column is related
+    to the input query. The output is decided by a boolean variable as some times we want only certain
+    fields and other times we all of them.
+    '''
+
     query_words = preprocess_text(query).split()
     # this list will contain all the docs that have the complete query in their description
     doc = set() 
@@ -383,6 +396,13 @@ def create_inverted_index_tfidf(vocabulary):
     print("Inverted index TF-IDF successfully created!")
 
 def top_k_documents(query, vocabulary, inverted_index, inverted_index_tfidf, k = 5):
+    '''
+    This function takes a query, remove all the unrelated documents and for every remaining documents
+    calculate it's cosine similarity between the query and the description field. Then it returns only
+    the first 'k' documents in order of similarity. Sometimes we want all the documents and not only
+    the first 'k', so we created an alternative output for when k = "all".
+    '''
+
     # preprocess and tokenize the query
     query_words = preprocess_text(query)
     

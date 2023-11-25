@@ -36,15 +36,18 @@ def algorithm(input_string):
     if result == False:
         print("NO")
     else:
+        # we start every day as the minimum, check if there are missing hours to reach the total and
+        # turn the current day from minimum to maximum if hours are missing. When we reach the point
+        # when adding all the hours make us miss the target we add just what we need to reach it
         print("YES")
         outputList = minList
         outputSum = minSum
         diffs = maxList - minList
         for i in range(d):
-            if outputSum + diffs[i] < sumHours:
+            if outputSum + diffs[i] < sumHours: # if "far" from objective turn to max
                 outputList[i] += diffs[i]
                 outputSum += diffs[i]
-            else:
+            else:  # if "near" objective add just what is needed
                 outputList[i] += sumHours - outputSum
                 break
         
