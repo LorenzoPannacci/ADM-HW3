@@ -45,7 +45,7 @@ def preprocess_text(txt):
 
     return txt
 
-def convert_to_eur(fees):
+def convert_to_eur(fees, api_key):
     '''
     This function takes as input a string of text. It starts by finding the currency symbol.
     The text is previously transformed into its uppercase form to simplify the search.
@@ -110,11 +110,10 @@ def convert_to_eur(fees):
     
     if len(c)>0:
         base_url = "https://open.er-api.com/v6/latest"
-        API_KEY="6d56fb10262e4f29bef560d4c38fa3f4"
         conv=[]
         # convert all the values into euros 
         for i in range(len(v)):
-            params = {'base': c[i], 'apiKey': API_KEY}
+            params = {'base': c[i], 'apiKey': api_key}
             response = requests.get(base_url, params=params)
             rates = response.json().get('rates', {})
             conv.append(np.round(v[i] * rates['EUR'], 2))
