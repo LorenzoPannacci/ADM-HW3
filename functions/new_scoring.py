@@ -61,11 +61,7 @@ def scoring_function(query, vocabulary, inverted_index, inverted_index_tfidf, k 
     for _, row in result_df.iterrows():
         
         # score based on the presence of the query in that spesific order in the description
-        if engine.preprocess_text(query) in engine.preprocess_text(row['description']):
-            score_description = similarities_scores[similarities_scores["url"] == row["url"]]["similarityScore"].item()
-        else:
-            # we use 'url' as unique identifier
-            score_description = similarities_scores[similarities_scores["url"] == row["url"]]["similarityScore"].item()
+        score_description = similarities_scores[similarities_scores["url"] == row["url"]]["similarityScore"].item()
        
         # score based on the presence of any part of the query in the course name
         score_course_name = any(word in engine.preprocess_text(row['courseName']) for word in engine.preprocess_text(query).split())

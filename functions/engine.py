@@ -121,7 +121,7 @@ def convert_to_eur(fees, api_key):
         conv=max(conv)
     return conv
 
-def fees_preprocessing():
+def fees_preprocessing(api_key):
     '''
     Add to our .tsv files a new column that store a value representing the fee of the course. When there is no fee to get from
     the 'fees' column we add NaN.
@@ -141,7 +141,7 @@ def fees_preprocessing():
         # ensure that the list has enough elements to pick correct column
         if len(fields) > 6:
             # get the fee value
-            f = convert_to_eur(fields[6])
+            f = convert_to_eur(fields[6], api_key)
         else:
             # otherwise placeholder value
             f = "0.0"
