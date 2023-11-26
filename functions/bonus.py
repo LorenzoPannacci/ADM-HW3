@@ -33,7 +33,7 @@ def generalized_create_vocabulary(t):
         # ensure that the list has enough elements
         if len(fields) > 4:
             
-            # preprocess the feature (1:description 2:course name 3:university name 4:university city) according to user's choice
+            # preprocess the feature (1:description 2:course name 3:university name 4:university city) according to input choice
             if t==1:
                 d=engine.preprocess_text(fields[4])
             elif t==2:
@@ -90,7 +90,7 @@ def generalized_create_inverted_index(vocabulary, t):
             lines=ff.readlines()
         
         fields = lines[1].strip().split('\t')
-        # Ensure that the list has enough elements
+        # ensure that the list has enough elements
         if len(fields) > 4:
             # access the description field and tokenize the words,
 
@@ -130,21 +130,21 @@ def generalized_create_inverted_index_tfidf(vocabulary, t):
     print("Creating inverted index type " + str(t) + "..." )
     # initialize the inverted index with tf-idf scores 
     inv_index_tfidf = {}
-    # Initialize dictionaries for term frequency (t_f) and document frequency (d_f)
+    # initialize dictionaries for term frequency (t_f) and document frequency (d_f)
     t_f = {}
     d_f = {}
 
-    # step 1: Calculate term frequency (tf) and inverse document frequency (idf)
+    # step 1: calculate term frequency (tf) and inverse document frequency (idf)
     for i in tqdm(range(1, n_courses + 1)):
         tsv="course_"+str(i)+".tsv"
         file_path= os.path.join(tsvs_path,tsv)
         with open(file_path, 'r', encoding='utf-8') as ff:
             lines=ff.readlines()
         
-        # Extract the fields from the second line
+        # extract the fields from the second line
         fields = lines[1].strip().split('\t')
         
-        # Ensure that the list has enough elements
+        # ensure that the list has enough elements
         if len(fields) > 4:
             # access the description field and tokenize the words,
 
@@ -330,7 +330,7 @@ def calculate_start_date_difference(start_date):
         current_month = pd.to_datetime('today').month
         
         if not start_months:
-            return 12  # return -1 if no valid months are found ("See course page", "Any Month" etch.)
+            return 12
         
         # find the closest future month
         # to find the closest month among the list we need to select the minimum difference. 

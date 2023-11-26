@@ -40,7 +40,7 @@ def preprocess_text(txt):
     stemmer = PorterStemmer()
     txt = [stemmer.stem(t) for t in txt]
  
-    # Reassemble the text
+    # reassemble the text
     txt = ' '.join(txt)
 
     return txt
@@ -184,7 +184,7 @@ def create_vocabulary():
             lines=ff.readlines()
         
         fields = lines[1].strip().split('\t')
-        # Ensure that the list has enough elements
+        # ensure that the list has enough elements
         if len(fields) > 4:
             
             # preprocess the description
@@ -231,7 +231,7 @@ def create_inverted_index(vocabulary):
             lines=ff.readlines()
         
         fields = lines[1].strip().split('\t')
-        # Ensure that the list has enough elements
+        # ensure that the list has enough elements
         if len(fields) > 4:
             # access the description field and tokenize the words,
             d=preprocess_text(fields[4])
@@ -337,7 +337,7 @@ def search_engine(query, vocabulary, inverted_index, all_rows = False):
 def create_inverted_index_tfidf(vocabulary):
     # initialize the inverted index with tf-idf scores 
     inv_index_tfidf = {}
-    # Initialize dictionaries for term frequency (t_f) and document frequency (d_f)
+    # initialize dictionaries for term frequency (t_f) and document frequency (d_f)
     t_f = {}
     d_f = {}
 
@@ -348,10 +348,10 @@ def create_inverted_index_tfidf(vocabulary):
         with open(file_path, 'r', encoding='utf-8') as ff:
             lines=ff.readlines()
         
-        # Extract the fields from the second line
+        # extract the fields from the second line
         fields = lines[1].strip().split('\t')
         
-        # Ensure that the list has enough elements
+        # ensure that the list has enough elements
         if len(fields) > 4:
             # access the description field and tokenize the words, 
             words=preprocess_text(fields[4]).split()
